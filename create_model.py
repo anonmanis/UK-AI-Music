@@ -69,3 +69,16 @@ test_labels = test[:,-10:]
 
 print(np.shape(train_input))
 print(np.shape(train_labels))
+
+model = Sequential([
+    Dense(100, input_dim=np.shape(train_input)[1]),
+    Activation('relu'),
+    Dense(10),
+    Activation('softmax'),
+    ])
+
+loss, acc = model.evaluate(test_input, test_labels, batch_size=32)
+
+print("Done!")
+print("Loss: %.4f, accuracy: %.4f" % (loss, acc))
+model.save('dataset_lagu.h5')
