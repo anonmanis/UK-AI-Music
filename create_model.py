@@ -77,6 +77,11 @@ model = Sequential([
     Activation('softmax'),
     ])
 
+model.compile(optimizer='adam',
+              loss='categorical_crossentropy',
+              metrics=['accuracy'])
+print(model.summary())
+
 loss, acc = model.evaluate(test_input, test_labels, batch_size=32)
 
 print("Done!")
