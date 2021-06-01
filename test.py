@@ -23,3 +23,7 @@ def set_features_and_labels(file):
         all_features.append(features)
 
     return np.stack(all_features)
+
+feature = set_features_and_labels('Wali-Orang_Bilang_62.wav')
+model.predict(feature)
+model.predict_classes(feature)
