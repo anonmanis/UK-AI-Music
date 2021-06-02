@@ -7,7 +7,6 @@ Keras-Applications==1.0.8
 Keras-Preprocessing==1.1.2
 librosa==0.8.1
 matplotlib==3.4.2
-tensorboard==2.5.0
 tensorboard-data-server==0.6.1
 tensorboard-plugin-wit==1.8.0
 tensorflow-cpu==2.5.0
