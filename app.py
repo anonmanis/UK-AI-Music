@@ -69,9 +69,7 @@ def upload_file():
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             flash('File successfully uploaded')
-            feature = set_features_and_labels(filename)
-            model.predict(feature)
-            model.predict_classes(feature)
+            flash(filename)
             return redirect('/')
         else:
             flash('Allowed file types are txt, pdf, png, jpg, jpeg, gif, wav')
