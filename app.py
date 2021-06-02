@@ -1,11 +1,6 @@
 import os
 from flask import Flask, flash, request, redirect, render_template
 from werkzeug.utils import secure_filename
-from keras.models import load_model
-import numpy as np
-import glob
-import librosa
-import librosa.feature
 
 app=Flask(__name__)
 
