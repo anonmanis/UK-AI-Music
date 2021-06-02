@@ -1,6 +1,11 @@
 import os
 from flask import Flask, flash, request, redirect, render_template
 from werkzeug.utils import secure_filename
+from keras.models import load_model
+import numpy as np
+import glob
+import librosa
+import librosa.feature
 
 app=Flask(__name__)
 
@@ -27,6 +32,26 @@ def allowed_file(filename):
 @app.route('/')
 def upload_form():
     return render_template('upload.html')
+    
+model = load_model('dataset_lagu.h5')
+def extract_features_song(f):
+    y, _ = librosa.load(f)
+
+    # get Mel-frequency cepstral coefficients
+    mfcc = librosa.feature.mfcc(y)
+    # normalize values between -1,1 (divide by max)
+    mfcc /= np.amax(np.absolute(mfcc))
+
+    return np.ndarray.flatten(mfcc)[:25000]
+
+def set_features_and_labels(file):
+    all_features = []
+    sound_files = glob.glob(file)
+    for f in sound_files:
+        features = extract_features_song(f)
+        all_features.append(features)
+
+    return np.stack(all_features)
 
 
 @app.route('/', methods=['POST'])
@@ -44,6 +69,9 @@ def upload_file():
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             flash('File successfully uploaded')
+            feature = set_features_and_labels(filename)
+            model.predict(feature)
+            model.predict_classes(feature)
             return redirect('/')
         else:
             flash('Allowed file types are txt, pdf, png, jpg, jpeg, gif, wav')
