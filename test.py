@@ -1,4 +1,4 @@
-from keras.models import load_model
+from tensorflow.python.keras.models import load_model
 import numpy as np
 import glob
 import librosa
@@ -7,10 +7,7 @@ import librosa.feature
 model = load_model('dataset_lagu.h5')
 def extract_features_song(f):
     y, _ = librosa.load(f)
-
-    # get Mel-frequency cepstral coefficients
     mfcc = librosa.feature.mfcc(y)
-    # normalize values between -1,1 (divide by max)
     mfcc /= np.amax(np.absolute(mfcc))
 
     return np.ndarray.flatten(mfcc)[:25000]
@@ -24,6 +21,10 @@ def set_features_and_labels(file):
 
     return np.stack(all_features)
 
-feature = set_features_and_labels('Wali-Orang_Bilang_62.wav')
-model.predict(feature)
-model.predict_classes(feature)
+def predict(filename):    
+    feature = set_features_and_labels('wali.wav')
+    pred = model.predict(feature)
+    result = np.where(pred[0] == np.amax(pred[0]))
+
+    genres = ['wali','betharia_sonata', 'egoist', 'gemie', 'kobayashi', 'mica', 'mizuki', 'mnroid', 'sora', 'tk']
+    return genres[result[0][0]]

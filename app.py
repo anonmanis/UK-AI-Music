@@ -1,11 +1,12 @@
 import os
 from flask import Flask, flash, request, redirect, render_template
 from werkzeug.utils import secure_filename
+import test 
 
 app=Flask(__name__)
 
 app.secret_key = "secret key"
-app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
+app.config['MAX_CONTENT_LENGTH'] = 128 * 1024 * 1024
 
 path = os.getcwd()
 # file Upload
@@ -17,7 +18,7 @@ if not os.path.isdir(UPLOAD_FOLDER):
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
-ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'wav'])
+ALLOWED_EXTENSIONS = set(['wav','au'])
 
 
 def allowed_file(filename):
@@ -41,11 +42,11 @@ def upload_file():
             return redirect(request.url)
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            flash('wali')
+            file.save(filename)
+            flash(test.predict(filename))
             return redirect('/')
         else:
-            flash('Allowed file types are txt, pdf, png, jpg, jpeg, gif, wav')
+            flash('Allowed file types is wav and au')
             return redirect(request.url)
 
 
