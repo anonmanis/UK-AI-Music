@@ -22,7 +22,7 @@ def set_features_and_labels(file):
     return np.stack(all_features)
 
 def predict(filename):    
-    feature = set_features_and_labels('wali.wav')
+    feature = set_features_and_labels(filename)
     pred = model.predict(feature)
     result = np.where(pred[0] == np.amax(pred[0]))
 
